@@ -1,0 +1,59 @@
+name: Daily File Download
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  download-and-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Download Files
+        run: |
+          mkdir -p dist
+          cd dist
+          curl -O https://adguardteam.github.io/HostlistsRegistry/assets/filter_1.txt
+          curl -O https://adguardteam.github.io/HostlistsRegistry/assets/filter_29.txt
+          curl -O https://adguardteam.github.io/HostlistsRegistry/assets/filter_21.txt
+          curl -O https://adguardteam.github.io/HostlistsRegistry/assets/filter_32.txt
+          curl -O https://adguardteam.github.io/HostlistsRegistry/assets/filter_23.txt
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "github-action[bot]"
+
+          git fetch
+          git checkout release
+
+          git checkout --orphan release-orphan
+          git rm -rf .
+
+          cp -rf dist/filter_1.txt ./
+          cp -rf dist/filter_29.txt ./
+          cp -rf dist/filter_21.txt ./
+          cp -rf dist/filter_32.txt ./
+          cp -rf dist/filter_23.txt ./
+
+          git add filter_1.txt
+          git add filter_29.txt
+          git add filter_21.txt
+          git add filter_32.txt
+          git add filter_23.txt
+
+          git commit -am "Updated at $(date)"
+
+          git branch -D release
+          git branch -m release
+
+      - name: GitHub Push
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release
+          force: true
