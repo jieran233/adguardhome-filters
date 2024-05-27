@@ -1,7 +1,11 @@
-# Testing. Not ready to use
+# Testing. Not ready for use
 
 # Wechat
+# Only work on its desktop app
 ||mp.weixin.qq.com/mp/appmsg_comment^
 
 # Bilibili
+# Only work on its desktop app (electron)
 ||api.bilibili.com/x/v2/reply/wbi/main^
+# For Android app
+||grpc.biliapi.net/bilibili.main.community.reply.v*.Reply^
