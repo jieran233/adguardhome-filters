@@ -1,0 +1,7 @@
+# Testing. Not ready to use
+
+# Wechat
+||mp.weixin.qq.com/mp/appmsg_comment^
+
+# Bilibili
+||api.bilibili.com/x/v2/reply/wbi/main^
